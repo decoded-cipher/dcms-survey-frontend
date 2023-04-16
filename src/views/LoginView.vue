@@ -28,6 +28,7 @@
 
             if (data.status === 200) {
               localStorage.setItem('token', data.token);
+              localStorage.setItem('user', JSON.stringify(data.user));
               this.$router.push('/');
             }
 

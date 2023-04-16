@@ -1,16 +1,23 @@
 <template>
-    <div class="home">
-        <!-- <Home /> -->
-        <p>Home View</p>
-    </div>
+    <MainLayout>
+
+        <NoPermission 
+            message="You don't have permission to view Analytics." 
+            link="/survey"
+            linkText="Create a Survey"
+        />
+        
+    </MainLayout>
 </template>
 
 <script>
-    // import Home from '@/components/Home.vue';
+    import MainLayout from '@/layouts/MainLayout.vue';
+    import NoPermission from '@/partials/NoPermission.vue';
     export default {
         name: 'HomeView',
-        // components: {
-        //     Home
-        // }
+        components: {
+            MainLayout,
+            NoPermission
+        }
     };
 </script>
