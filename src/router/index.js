@@ -10,7 +10,14 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      beforeEnter: (to, from, next) => {
+        if (!localStorage.getItem('token')) {
+          next('/login')
+        } else {
+          next()
+        }
+      }
     },
     {
       path: '/survey',
