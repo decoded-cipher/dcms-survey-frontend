@@ -26,6 +26,7 @@
             question = "Do you own any vehicle?"
             name = "vehicle"
             inputType = "select"
+            @setData = "setData"
         />
 
 
@@ -35,6 +36,7 @@
             name = "bankAccount"
             inputType = "select"
             :options = "bankNames"
+            @setData = "setData"
         />
 
 
@@ -138,6 +140,25 @@
         },
         data () {
             return {
+
+
+                survey : {
+                    land: null,
+                    house: null,
+                    vehicle: null,
+                    bankAccount: null,
+                    insurancePolicy: null,
+                    investment: null,
+                    liability: null,
+                    govtJob: null,
+                    farming: null,
+                    business: null,
+                    migrant: null,
+                    priestlyMember: null,
+                    rationCard: null,
+                },
+
+
                 panchayaths: [
                     { text: 'Vazhappally', value: 'vazhappally' },
                     { text: 'Aymanam', value: 'aymanam' },
@@ -251,8 +272,15 @@
 
         methods: {
             setData(data) {
-                // console.log(data);
-                this.$emit('setData', data);
+                
+                if(data.checkbox === true) {
+                    this.survey[data.name] = data.value;
+                } 
+                else {
+                    this.survey[data.name] = null;
+                }
+
+                this.$emit('setData', this.survey);
             }
         }
     }

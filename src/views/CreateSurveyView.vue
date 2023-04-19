@@ -2,9 +2,9 @@
     <MainLayout>
 
         <div class="mb-4 px-4">
-            <GeneralInfo />
+            <GeneralInfo @setData="setData" />
             <SocioEconomic @setData="setData" />
-            <FamilyDetails />
+            <FamilyDetails @setData="setData" />
             
             <div class="flex justify-end">
                 <button class="flex items-center justify-center w-full md:w-1/5 px-4 py-3 my-6 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-md hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500">
@@ -39,7 +39,7 @@
 
         methods: {
             setData(data) {
-                console.log(data);
+                console.table(data);
             }
         }
         

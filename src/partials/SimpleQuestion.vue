@@ -12,9 +12,9 @@
                 <span class="text-xs text-gray-800 dark:text-gray-400">Yes</span>
             </div>
 
-            <div class="w-full">
+            <div v-show="checkboxValue" class="w-full">
 
-                <input v-if="inputType === 'text' || inputType === 'number'" :name="name" :id="name" :type="inputType" :placeholder="placeholder" class="w-full md:w-2/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required @input="setData()" />
+                <input v-if="inputType === 'text' || inputType === 'number'" :name="name" :id="name" :type="inputType" :placeholder="placeholder" class="w-full md:w-2/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @input="setData()" value="0.00" />
                                 
                 <select v-else-if="inputType === 'select'" :name="name" :id="name" class="w-full md:w-2/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block px-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @change="setData()">
                     <option class="text-xs md:text-sm px-4 py-1 text-gray-900 dark:text-white" v-for="option in options" :value="option.value" :key="option.value">{{ option.text }}</option>
@@ -55,13 +55,25 @@ export default {
     data() {
         return {
             checkboxId: this.name + "_checkbox",
+            checkboxValue: false,
+            value: null,
         }
     },
     methods: {
         setData() {
+            this.checkboxValue = document.getElementById(this.checkboxId).checked;
+
+            if(this.checkboxValue === true) {
+                if(document.getElementById(this.name).value) {
+                    this.value = document.getElementById(this.name).value;
+                } else {
+                    this.value = null;
+                }
+            }
+            
             this.$emit('setData', {
                 name: this.name,
-                value: document.getElementById(this.name).value,
+                value: this.value,
                 checkbox: document.getElementById(this.checkboxId).checked
             })
         }
