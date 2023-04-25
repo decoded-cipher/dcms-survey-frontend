@@ -4,11 +4,20 @@
         <h3 class="mb-4 text-xl font-bold dark:text-white">Family Members</h3>
 
         <FamilyMember
+            :key=0
+            :index=0
+            :generalInfo="this.generalInfo"
+            :autoFill = true
+            @setData="syncData"
+        />
+
+        
+        <FamilyMember
             v-for="(familyMember, index) in familyMembers"
             :key="index"
             :index="index"
             @setData="setData"
-            @removeFamilyMember="removeFamilyMember(index)"
+            @removeFamilyMember="removeFamilyMember"
         />
 
         <div class="flex justify-start">
@@ -34,7 +43,14 @@
         name: 'Login',
         data() {
             return {
-                familyMembers: [{}]
+                familyMembers: [],
+                wholeFamily: []
+            }
+        },
+        props: {
+            generalInfo: {
+                type: Object,
+                required: true
             }
         },
         components: {
@@ -42,20 +58,47 @@
         },
         methods: {
             addFamilyMember() {
-                this.familyMembers.push({});
+                this.familyMembers.push({
+                    firstName: null,
+                    lastName: null,
+                    gender: null,
+                    relationship: null,
+                    age: null,
+                    maritalStatus: null,
+                    education: null,
+                    occupation: null,
+                    parishDeligation: null,
+                    phone: null,
+                });
+                this.wholeFamily = [this.wholeFamily[0], ...this.familyMembers]
+                this.$emit('setData', this.wholeFamily);
+                console.table(this.wholeFamily);
             },
 
             removeFamilyMember(index) {
-                if (this.familyMembers.length > 1) {
+                console.log('removeFamilyMember', index);
+                
+                if (this.familyMembers[index]) {
                     this.familyMembers.splice(index, 1);
-                } else {
-                    alert('You must have at least one family member');
                 }
+
+                this.wholeFamily = [this.wholeFamily[0], ...this.familyMembers]
+                this.$emit('setData', this.wholeFamily);
+                // console.table(this.wholeFamily);
             },
 
             setData(data) {
                 this.familyMembers[data.index] = data.data;
-                this.$emit('setData', this.familyMembers);
+                this.wholeFamily = [this.wholeFamily[0], ...this.familyMembers]
+                this.$emit('setData', this.wholeFamily);
+                // console.table(this.wholeFamily);
+            },
+
+            syncData(data) {
+                this.wholeFamily[0] = data.data;
+                this.wholeFamily = [this.wholeFamily[0], ...this.familyMembers]
+                this.$emit('setData', this.wholeFamily);
+                // console.table(this.wholeFamily);
             }
 
             

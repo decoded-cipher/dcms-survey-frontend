@@ -121,6 +121,14 @@
             @setData = "setData"
         />
 
+        <!-- Question to know whether the family is a member of DCMS -->
+        <YesNoQuestion
+            question = "Are you a member of DCMS?"
+            name = "dcmsMember"
+            @setData = "setYesNoData"
+        />
+
+
     </div>
 
 </template>
@@ -131,12 +139,14 @@
     import SimpleQuestion from '../../partials/SimpleQuestion.vue';
     import BankDetails from '../../partials/BankDetails.vue';
     import VehicleDetails from '../../partials/VehicleDetails.vue';
+    import YesNoQuestion from '../../partials/YesNoQuestion.vue';
 
     export default {
         components: {
             SimpleQuestion,
             BankDetails,
             VehicleDetails,
+            YesNoQuestion
         },
         data () {
             return {
@@ -156,6 +166,7 @@
                     migrant: null,
                     priestlyMember: null,
                     rationCard: null,
+                    dcmsMember: false
                 },
 
 
@@ -281,7 +292,12 @@
                 }
 
                 this.$emit('setData', this.survey);
-            }
+            },
+
+            setYesNoData(data) {
+                this.survey[data.name] = data.checkbox;
+                this.$emit('setData', this.survey);
+            },
         }
     }
 

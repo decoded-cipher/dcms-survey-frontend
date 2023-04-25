@@ -5,15 +5,17 @@
         <div class="mt-3 mb-6">
 
             <div class="flex justify-between pb-2">
-                <h3 class="text-md font-semibold dark:text-white">Details : Member - #0{{ index + 1 }}</h3>
-                <button class="flex items-center justify-center text-sm font-medium text-white border border-transparent rounded-md hover:bg-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500" @click="removeFamilyMember(index)">
+                <h3 v-if="generalInfo" class="text-md font-semibold dark:text-white">Details : Householder</h3>
+                <h3 v-else class="text-md font-semibold dark:text-white">Details : Member - #0{{ index + 1 }}</h3>
+                <button v-if="!generalInfo" class="flex items-center justify-center text-sm font-medium text-white border border-transparent rounded-md hover:bg-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500" @click="removeFamilyMember(index)">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </button>
-
             </div>
-            <span class="text-xs text-gray-500 dark:text-gray-400">Note : The following fields are for entering the details of the family member #0{{ index + 1 }}</span>
+
+            <span v-if="generalInfo" class="text-xs text-gray-500 dark:text-gray-400">Note : The following fields are for entering the details of the householder.</span>
+            <span v-else class="text-xs text-gray-500 dark:text-gray-400">Note : The following fields are for entering the details of the family member #0{{ index + 1 }}</span>
         </div>
 
         <div class="grid grid-cols-1 xl:mb-0 md:gap-6 gap-4 sm:grid-cols-6">
@@ -21,11 +23,11 @@
             <div class="flex gap-4 md:grid md:grid-cols-2 col-span-3">
                 <div>
                     <label :for="'first-name_' + index" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
-                    <input type="text" :name="'first-name_' + index" :id="'first-name_' + index" class="shadow-sm bg-gray-50 border border-gray\-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required v-model="familyMember.firstName" @input="setData()">
+                    <input type="text" :name="'first-name_' + index" :id="'first-name_' + index" class="shadow-sm bg-gray-50 border border-gray\-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required v-model="familyMember.firstName" @input="setData()" :disabled = "autoFill">
                 </div>
                 <div>
                     <label :for="'last-name_' + index" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
-                    <input type="text" :name="'last-name_' + index" :id="'last-name_' + index" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Varghese" required v-model="familyMember.lastName" @input="setData()">
+                    <input type="text" :name="'last-name_' + index" :id="'last-name_' + index" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Varghese" required v-model="familyMember.lastName" @input="setData()" :disabled = "autoFill">
                 </div>
             </div>
     
@@ -36,7 +38,7 @@
                         <option class="text-xs md:text-sm px-4 py-1 text-gray-900 dark:text-white" v-for="gender in genders" :value="gender.value" :key="gender.value">{{ gender.text }}</option>
                     </select>
                 </div>
-                <div class="w-full">
+                <div v-if="!generalInfo" class="w-full">
                     <label :for="'relationship_' + index" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Relationship</label>
                     <select :name="'relationship_' + index" :id="'relationship_' + index" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" v-model="familyMember.relationship" @change="setData()">
                         <option class="text-xs md:text-sm px-4 py-1 text-gray-900 dark:text-white" v-for="relationship in relationships" :value="relationship.value" :key="relationship.value">{{ relationship.text }}</option>
@@ -81,7 +83,7 @@
                 </div>
                 <div class="w-full">
                     <label :for="'phone' + index" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone Number</label>
-                    <input type="tel" :name="'phone' + index" :id="'phone' + index" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="+91 98765 45678" required v-model="familyMember.phone" @input="setData()">
+                    <input type="tel" :name="'phone' + index" :id="'phone' + index" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="+91 98765 45678" required v-model="familyMember.phone" @input="setData()" :disabled = "autoFill">
                 </div>
             </div>
     
@@ -98,7 +100,15 @@
             index: {
                 type: Number,
                 required: true
-            }
+            },
+            generalInfo: {
+                type: Object,
+                required: false
+            },
+            autoFill: {
+                type: Boolean,
+                required: false
+            },
         },
         data() {
             return {
@@ -107,7 +117,7 @@
                     firstName: null,
                     lastName: null,
                     gender: 'male',
-                    relationship: 'child',
+                    relationship: this.generalInfo ? 'self' : 'spouse',
                     age: null,
                     maritalStatus: 'married',
                     education: 'bachelor-degree',
@@ -133,7 +143,7 @@
                     { text: 'Aunt/Uncle', value: 'aunt-uncle' },
                     { text: 'Niece/Nephew', value: 'niece-nephew' },
                     { text: 'Cousin', value: 'cousin' },
-                    { text: 'Other', value: 'other' }
+                    { text: 'Other', value: 'other' },
                 ],
                 maritalStatuses : [
                     { text: 'Single', value: 'single' },
@@ -184,6 +194,18 @@
                     index: this.index,
                     data: this.familyMember
                 })
+            }
+        },
+
+        // update the value of the input when the prop changes
+        watch: {
+            generalInfo: {
+                handler: function (newVal, oldVal) {
+                    this.familyMember.firstName = newVal.firstName
+                    this.familyMember.lastName = newVal.lastName
+                    this.familyMember.phone = newVal.phone
+                },
+                deep: true
             }
         }
     }
