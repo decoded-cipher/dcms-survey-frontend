@@ -129,7 +129,8 @@
             async submitSurvey() {
                 if (this.dataValidation()) {
                     
-                    await fetch('http://localhost:3000/survey/create', {
+                    // await fetch('http://localhost:3000/survey/create', {
+                    await fetch('http://dcms-api.app.inovuslabs.org/survey/create', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
