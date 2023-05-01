@@ -4,7 +4,7 @@
         
         <div class="items-center justify-center w-full bg-white rounded-lg shadow lg:flex md:mt-0 lg:max-w-screen-lg 2xl:max:max-w-screen-lg xl:p-0 dark:bg-gray-800">
             <div class="hidden w-2/3 lg:flex">
-                <img class="rounded-l-lg" src="	https://flowbite.com/application-ui/demo/images/authentication/login.jpg" alt="login image">
+                <img class="rounded-l-lg" src="/images/login.jpg" alt="login image">
             </div>
             <div class="w-full p-6 space-y-8 sm:p-8 lg:p-16 lg:py-0">
                 <h2 class="text-2xl font-bold text-gray-900 lg:text-3xl dark:text-white">
