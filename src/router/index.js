@@ -20,7 +20,7 @@ const router = createRouter({
       }
     },
     {
-      path: '/survey',
+      path: '/create',
       name: 'CreateSurvey',
       beforeEnter: (to, from, next) => {
         if (!localStorage.getItem('token')) {
